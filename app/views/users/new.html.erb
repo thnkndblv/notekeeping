@@ -1,54 +1,52 @@
-<div class="container">
-  <div class="row">
-    <div class="col s12 m6 offset-m3">
-      <% if @user.errors.any? %>
-        <div class="card-panel">
-          <div class="card-content red-text">
-            The form contains <%= pluralize(@user.errors.count, "error") %>.
-            <ul>
-            <% @user.errors.full_messages.each do |msg| %>
-              <li><%= msg %></li>
-            <% end %>
-            </ul>
-          </div>
+<div class="row">
+  <div class="col s12 m6 offset-m3">
+    <% if @user.errors.any? %>
+      <div class="card-panel">
+        <div class="card-content red-text">
+          The form contains <%= pluralize(@user.errors.count, "error") %>.
+          <ul>
+          <% @user.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+          </ul>
         </div>
-      <% end %>
+      </div>
+    <% end %>
 
-      <%= form_for @user do |f| %>
-        <div class="row">
-          <div class="input-field col s12">
-            <%= f.label :name %>
-            <%= f.text_field :name %>
-          </div>
+    <%= form_for @user do |f| %>
+      <div class="row">
+        <div class="input-field col s12">
+          <%= f.label :name %>
+          <%= f.text_field :name %>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="input-field col s12">
-            <%= f.label :email %>
-            <%= f.email_field :email %>
-          </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <%= f.label :email %>
+          <%= f.email_field :email %>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="input-field col s12">
-            <%= f.label :password %>
-            <%= f.password_field :password %>
-          </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <%= f.label :password %>
+          <%= f.password_field :password %>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="input-field col s12">
-            <%= f.label :password_confirmation  %>
-            <%= f.password_field :password_confirmation %>
-          </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <%= f.label :password_confirmation  %>
+          <%= f.password_field :password_confirmation %>
         </div>
+      </div>
 
-        <div class="row">
-          <div class="input-field col s12">
-            <%= f.submit "Create my account", class: "btn" %>
-          </div>
+      <div class="row">
+        <div class="input-field col s12">
+          <%= f.submit "Create my account", class: "btn" %>
         </div>
-      <% end %>
-    </div>
+      </div>
+    <% end %>
   </div>
 </div>
