@@ -1,0 +1,29 @@
+<div class="container">
+  <div class="row">
+    <div class="col s12 m6 offset-m3">
+      <%= form_for(:session, url: login_path) do |f| %>
+        <div class="row">
+          <div class="input-field col s12">
+            <%= f.label :email %>
+            <%= f.email_field :email %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <%= f.label :password %>
+            <%= f.password_field :password %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <%= f.submit "Log in", class: "btn" %>
+          </div>
+        </div>
+      <% end %>
+
+      <p>New user? <%= link_to "Sign up now!", signup_path %></p>
+    </div>
+  </div>
+</div>
