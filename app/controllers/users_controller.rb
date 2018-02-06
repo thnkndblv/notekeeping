@@ -13,9 +13,10 @@ class UsersController < ApplicationController
 
     if @user.save
       log_in(@user)
-      redirect_to @user
+      redirect_to(root_path)
     else
-      render 'new'
+      flash[:errors] = @user.errors.full_messages
+      redirect_to(signup_path)
     end
   end
 
