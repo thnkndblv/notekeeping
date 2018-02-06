@@ -21,7 +21,7 @@ class NotesController < ApplicationController
   end
 
   def destroy
-    @note = current_user.notes.find_by(id: params[:id])
+    @note = current_user.notes.find(note_id)
     @note.update_attribute(:active, false)
 
     redirect_to(notes_path)
@@ -37,5 +37,9 @@ class NotesController < ApplicationController
     params
       .require(:note)
       .permit(:title, :content)
+  end
+
+  def note_id
+    Integer(params[:id])
   end
 end
