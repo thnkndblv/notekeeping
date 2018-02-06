@@ -2,7 +2,7 @@ class NotesController < ApplicationController
   before_action :require_login
 
   def index
-    @notes = current_user.notes.all
+    @notes = current_user.notes.where(active: true).all
   end
 
   def new
@@ -18,6 +18,13 @@ class NotesController < ApplicationController
       flash[:errors] = @note.errors.full_messages
       redirect_to(new_note_path)
     end
+  end
+
+  def destroy
+    @note = current_user.notes.find_by(id: params[:id])
+    @note.update_attribute(:active, false)
+
+    redirect_to(notes_path)
   end
 
   private
