@@ -22,10 +22,10 @@ class UsersLoginTest < ActionDispatch::IntegrationTest
       }
     }
 
-    assert_redirected_to @user
+    assert_redirected_to root_path
     follow_redirect!
 
-    assert_template 'users/show'
+    assert_template 'notes/index'
     assert is_logged_in?
 
     assert_select "a[href=?]", login_path, count: 0
