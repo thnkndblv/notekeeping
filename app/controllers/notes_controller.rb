@@ -20,6 +20,13 @@ class NotesController < ApplicationController
     end
   end
 
+  def destroy
+    @note = current_user.notes.find_by(id: params[:id])
+    @note.update_attribute(:active, false)
+
+    redirect_to(notes_path)
+  end
+
   private
 
   def require_login
