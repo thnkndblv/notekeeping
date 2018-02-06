@@ -5,6 +5,17 @@ class NotesController < ApplicationController
     @notes = current_user.notes.where(active: true).all.reverse
   end
 
+  def edit
+    @note = current_user.notes.where(active: true).find(note_id)
+  end
+
+  def update
+    @note = current_user.notes.where(active: true).find(note_id)
+    @note.assign_attributes(note_params)
+
+    save_note(@note) { |note| redirect_to(edit_note_path(note)) }
+  end
+
   def new
     @note = current_user.notes.build
   end
