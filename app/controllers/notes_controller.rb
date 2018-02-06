@@ -2,7 +2,18 @@ class NotesController < ApplicationController
   before_action :require_login
 
   def index
-    @notes = current_user.notes.where(active: true).all
+    @notes = current_user.notes.where(active: true).all.reverse
+  end
+
+  def edit
+    @note = current_user.notes.where(active: true).find(note_id)
+  end
+
+  def update
+    @note = current_user.notes.where(active: true).find(note_id)
+    @note.assign_attributes(note_params)
+
+    save_note(@note) { |note| redirect_to(edit_note_path(note)) }
   end
 
   def new
@@ -12,16 +23,11 @@ class NotesController < ApplicationController
   def create
     @note = current_user.notes.build(note_params)
 
-    if @note.save
-      redirect_to(notes_path)
-    else
-      flash[:errors] = @note.errors.full_messages
-      redirect_to(new_note_path)
-    end
+    save_note(@note) { |_| redirect_to(new_note_path) }
   end
 
   def destroy
-    @note = current_user.notes.find_by(id: params[:id])
+    @note = current_user.notes.find(note_id)
     @note.update_attribute(:active, false)
 
     redirect_to(notes_path)
@@ -37,5 +43,18 @@ class NotesController < ApplicationController
     params
       .require(:note)
       .permit(:title, :content)
+  end
+
+  def note_id
+    Integer(params[:id])
+  end
+
+  def save_note(note)
+    if note.save
+      redirect_to(notes_path)
+    else
+      flash[:errors] = note.errors.full_messages
+      yield(note)
+    end
   end
 end
