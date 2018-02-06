@@ -23,7 +23,11 @@
               </div>
 
               <div class="card-action">
-                <%= link_to(note, class: 'btn-floating red', method: :delete) do %>
+                <%= link_to(edit_note_path(note), class: 'btn-floating blue') do %>
+                  <i class="material-icons">edit</i>
+                <% end %>
+
+                <%= link_to(note, class: 'btn-floating grey', method: :delete) do %>
                   <i class="material-icons">delete</i>
                 <% end %>
               </div>
