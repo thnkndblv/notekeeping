@@ -1,0 +1,33 @@
+<div class="row">
+  <div class="col s12">
+    <div class="card-panel">
+      <%= render 'shared/message_error' %>
+
+      <%= form_for @note, method: yield(:form_method) do |f| %>
+        <div class="row">
+          <div class="input-field col s6">
+            <%= f.text_field :title %>
+            <%= f.label :title %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s12">
+            <%= f.text_area :content, class: 'materialize-textarea' %>
+            <%= f.label :content, 'Note' %>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="input-field col s6 m6">
+            <%= f.submit yield(:submit_label), class: 'btn' %>
+          </div>
+
+          <div class="input-field col s6 m6">
+            <%= link_to 'Cancel', notes_path, class: 'btn grey' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
