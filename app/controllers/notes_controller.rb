@@ -12,12 +12,7 @@ class NotesController < ApplicationController
   def create
     @note = current_user.notes.build(note_params)
 
-    if @note.save
-      redirect_to(notes_path)
-    else
-      flash[:errors] = @note.errors.full_messages
-      redirect_to(new_note_path)
-    end
+    save_note(@note) { |_| redirect_to(new_note_path) }
   end
 
   def destroy
@@ -41,5 +36,14 @@ class NotesController < ApplicationController
 
   def note_id
     Integer(params[:id])
+  end
+
+  def save_note(note)
+    if note.save
+      redirect_to(notes_path)
+    else
+      flash[:errors] = note.errors.full_messages
+      yield(note)
+    end
   end
 end
