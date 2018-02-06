@@ -2,7 +2,7 @@ class NotesController < ApplicationController
   before_action :require_login
 
   def index
-    @notes = current_user.notes.where(active: true).all
+    @notes = current_user.notes.where(active: true).all.reverse
   end
 
   def new
