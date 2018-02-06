@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  has_many :notes
+
   before_save { self.email = email.downcase }
 
   validates :name,

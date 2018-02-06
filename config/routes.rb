@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  root 'static_pages#home'
+  root 'notes#index'
 
   get 'static_pages/home'
   get '/signup', to: 'users#new'
@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   get    '/login',   to: 'sessions#new'
   post   '/login',   to: 'sessions#create'
   delete '/logout',  to: 'sessions#destroy'
-  
+
   resources :users
+  resources :notes
 end
