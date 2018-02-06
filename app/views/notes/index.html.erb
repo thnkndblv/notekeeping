@@ -21,6 +21,12 @@
                 <span class="card-title"><%= note.title.html_safe %></span>
                 <p><%= note.content.html_safe %></p>
               </div>
+
+              <div class="card-action">
+                <%= link_to(note, class: 'btn-floating red', method: :delete) do %>
+                  <i class="material-icons">delete</i>
+                <% end %>
+              </div>
             </div>
           </div>
         </div>
