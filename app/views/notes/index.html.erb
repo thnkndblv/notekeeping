@@ -23,13 +23,7 @@
               </div>
 
               <div class="card-action">
-                <%= link_to(edit_note_path(note), class: 'btn-floating blue') do %>
-                  <i class="material-icons">edit</i>
-                <% end %>
-
-                <%= link_to(note, class: 'btn-floating grey', method: :delete) do %>
-                  <i class="material-icons">delete</i>
-                <% end %>
+                <%= render 'shared/action_buttons', locals: { note: note } %>
               </div>
             </div>
           </div>
