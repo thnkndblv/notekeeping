@@ -2,7 +2,11 @@ class NotesController < ApplicationController
   before_action :require_login
 
   def index
-    @notes = current_user.notes.where(active: true).all.reverse
+    @notes = current_user
+      .notes
+      .where(active: true)
+      .order(created_at: :desc)
+      .all
   end
 
   def show
