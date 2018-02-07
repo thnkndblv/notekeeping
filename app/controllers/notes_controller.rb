@@ -48,7 +48,7 @@ class NotesController < ApplicationController
   def note_params
     params
       .require(:note)
-      .permit(:title, :content)
+      .permit(:title, :content, tags: [])
   end
 
   def query_fields
