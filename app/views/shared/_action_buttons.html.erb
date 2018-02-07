@@ -1,0 +1,28 @@
+<div class="horizontal js-note--action-buttons">
+  <%= link_to(edit_note_path(locals[:note]), class: 'btn-floating blue') do %>
+    <i class="material-icons">edit</i>
+  <% end %>
+
+  <a class="btn-floating grey js-note-actions--delete">
+    <i class="material-icons">delete</i>
+  </a>
+
+  <a class="btn-floating green js-note-actions--tag">
+    <i class="material-icons">label</i>
+  </a>
+
+  <%= link_to('#', class: 'btn-floating red') do %>
+    <i class="material-icons">share</i>
+  <% end %>
+</div>
+
+<%= form_for locals[:note], html: { class: 'js-delete-confirm row hide js-action-form' }, method: :delete do |f| %>
+  <p>Are you sure you want to delete this note?</p>
+  <%= f.submit 'Yes', class: 'btn' %>
+  <%= f.button 'No', class: 'btn grey js-cancel-button' %>
+<% end %>
+
+<div class="js-add-tag row hide js-action-form">
+  <div class="chips" data-note-id="<%= locals[:note].id %>"></div>
+  <input type="button" class="btn grey js-cancel-button" value="Ok"/>
+</div>

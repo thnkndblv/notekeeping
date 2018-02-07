@@ -16,20 +16,14 @@
       <% @notes.each do |note| %>
         <div class="row">
           <div class="col s12">
-            <div class="card blue-grey lighten-4">
+            <div class="card blue-grey lighten-5">
               <div class="card-content">
-                <span class="card-title"><%= note.title.html_safe %></span>
-                <p><%= note.content.html_safe %></p>
+                <span class="card-title"><%= h(note.title) %></span>
+                <p><%= simple_format(h(note.content)) %></p>
               </div>
 
               <div class="card-action">
-                <%= link_to(edit_note_path(note), class: 'btn-floating blue') do %>
-                  <i class="material-icons">edit</i>
-                <% end %>
-
-                <%= link_to(note, class: 'btn-floating grey', method: :delete) do %>
-                  <i class="material-icons">delete</i>
-                <% end %>
+                <%= render 'shared/action_buttons', locals: { note: note } %>
               </div>
             </div>
           </div>

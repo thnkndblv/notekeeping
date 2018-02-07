@@ -5,6 +5,16 @@ class NotesController < ApplicationController
     @notes = current_user.notes.where(active: true).all.reverse
   end
 
+  def show
+    tags = current_user
+      .notes
+      .where(active: true, id: note_id)
+      .select(*query_fields)
+      .first
+
+    render json: tags
+  end
+
   def edit
     @note = current_user.notes.where(active: true).find(note_id)
   end
@@ -35,14 +45,22 @@ class NotesController < ApplicationController
 
   private
 
-  def require_login
-    redirect_to(login_path) unless logged_in?
-  end
-
   def note_params
     params
       .require(:note)
-      .permit(:title, :content)
+      .permit(:title, :content, tags: [])
+  end
+
+  def query_fields
+    allowed = %(tags)
+
+    params
+      .require(:fields)
+      .tap do |fields|
+        fields.each do |field|
+          raise ArgumentError, "Invalid field: '#{field}'" unless allowed.include?(field)
+        end
+      end
   end
 
   def note_id
