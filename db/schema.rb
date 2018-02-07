@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180207073836) do
+ActiveRecord::Schema.define(version: 20180207080456) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -31,6 +31,19 @@ ActiveRecord::Schema.define(version: 20180207073836) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "shares", force: :cascade do |t|
+    t.bigint "note_id"
+    t.bigint "user_id"
+    t.bigint "to_user_id", null: false
+    t.string "permission", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["note_id", "user_id", "to_user_id"], name: "index_shares_on_note_id_and_user_id_and_to_user_id", unique: true
+    t.index ["note_id"], name: "index_shares_on_note_id"
+    t.index ["user_id"], name: "index_shares_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -41,4 +54,8 @@ ActiveRecord::Schema.define(version: 20180207073836) do
   end
 
   add_foreign_key "notes", "users"
+  add_foreign_key "shares", "notes"
+  add_foreign_key "shares", "permission_types", column: "permission", primary_key: "permission"
+  add_foreign_key "shares", "users"
+  add_foreign_key "shares", "users", column: "to_user_id"
 end
