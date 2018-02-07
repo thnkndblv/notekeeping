@@ -35,10 +35,6 @@ class NotesController < ApplicationController
 
   private
 
-  def require_login
-    redirect_to(login_path) unless logged_in?
-  end
-
   def note_params
     params
       .require(:note)
