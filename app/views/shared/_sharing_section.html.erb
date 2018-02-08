@@ -1,0 +1,44 @@
+<% note = locals[:note] %>
+<% items = note.share_list %>
+
+<div class="row hide js-share-action">
+  <div class="col s12">
+    <ul class="collection">
+      <% items.each do |item| %>
+        <li class="collection-item">
+          <%= form_for :share, url: "/notes/#{note.id}/shares/#{item.id}", method: :delete do |f| %>
+            <button type="submit" class="secondary-content" style="border: none;">
+              <i class="material-icons white-text circle red">delete</i>
+            </button>
+            
+            <span class="title"><%= item[:email] %></span><br/>
+            <span class="grey-text">(<%= item[:permission] %>)</span>
+          <% end %>
+        </li>
+      <% end %>
+
+        <li class="col s12 collection-item">
+
+          <%= form_for :share, url: "notes/#{note.id}/shares", method: :post do |f| %>
+            <div class="input-field col s12">
+              <%= f.email_field :email %>
+              <%= f.label :email %>
+            </div>
+
+            <% radio_id = "#{note.id}_permission" %>
+            <% PermissionType.all.each do |p| %>
+              <p>
+                <%= radio_button_tag('share[permission]', p.permission, false, id: "#{radio_id}_#{p.permission}") %>
+                <%= label_tag("#{radio_id}_#{p.permission}", p.permission) %>
+              </p>
+            <% end %>
+
+            <div class="input-field col s12">
+              <%= f.submit 'Share', class: 'btn' %>
+              <%= f.button 'Cancel', class: 'btn grey js-cancel-button' %>
+            </div>
+          <% end %>
+        </li>
+    </ul>
+  </div>
+</div>

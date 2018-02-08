@@ -1,5 +1,6 @@
 class User < ApplicationRecord
   has_many :notes
+  has_many :shares
 
   before_save { self.email = email.downcase }
 
