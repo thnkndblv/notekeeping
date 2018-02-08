@@ -2,32 +2,30 @@ class NotesController < ApplicationController
   before_action :require_login
 
   def index
-    @notes = current_user
-      .notes
-      .where(active: true)
-      .order(created_at: :desc)
-      .all
+    @notes = fetch_notes.select(&:read?)
   end
 
   def show
-    tags = current_user
-      .notes
-      .where(active: true, id: note_id)
-      .select(*query_fields)
-      .first
+    note = fetch_notes(note_id: note_id).first.query! do |note|
+      note.select(*query_fields)
+    end
 
-    render json: tags
+    render json: note.first
   end
 
   def edit
-    @note = current_user.notes.where(active: true).find(note_id)
+    @note = fetch_notes(note_id: note_id).first
   end
 
   def update
-    @note = current_user.notes.where(active: true).find(note_id)
-    @note.assign_attributes(note_params)
+    @note = fetch_notes(note_id: note_id).first
 
-    save_note(@note) { |note| redirect_to(edit_note_path(note)) }
+    if @note.update? && @note.update_attributes(note_params)
+      redirect_to(notes_path)
+    else
+      flash[:errors] = @note.errors.full_messages
+      redirect_to(edit_note_path(@note))
+    end
   end
 
   def new
@@ -35,14 +33,28 @@ class NotesController < ApplicationController
   end
 
   def create
-    @note = current_user.notes.build(note_params)
+    saved = nil
+    ActiveRecord::Base.transaction do
+      @note = current_user.notes.build(note_params)
+      saved = @note.save
+      Share.find_or_create_by(
+        note_id: @note.id,
+        user_id: @note.user_id,
+        to_user_id: @note.user_id,
+        permission: 'own'
+      )
+    end
 
-    save_note(@note) { |_| redirect_to(new_note_path) }
+    if saved
+      redirect_to(notes_path)
+    else
+      flash[:errors] = @note.errors.full_messages
+      redirect_to(new_note_path)
+    end
   end
 
   def destroy
-    @note = current_user.notes.find(note_id)
-    @note.update_attribute(:active, false)
+    fetch_notes(note_id: note_id).first.delete!
 
     redirect_to(notes_path)
   end
@@ -71,12 +83,18 @@ class NotesController < ApplicationController
     Integer(params[:id])
   end
 
-  def save_note(note)
-    if note.save
-      redirect_to(notes_path)
-    else
-      flash[:errors] = note.errors.full_messages
-      yield(note)
-    end
+  def fetch_notes(note_id: nil)
+    notes = Note
+      .joins(:shares)
+      .order(created_at: :desc)
+      .distinct
+      .where(
+        notes: { active: true },
+        shares: { active: true, to_user_id: current_user.id }
+      )
+
+    notes = notes.where(notes: { id: note_id }) if note_id
+
+    notes.map { |n| ::ComplexNote.new(n, current_user) }
   end
 end
