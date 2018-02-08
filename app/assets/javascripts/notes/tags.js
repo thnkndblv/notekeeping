@@ -30,9 +30,8 @@
 
     fetchTags(noteId)
       .then(function (response) {
-        var tags = response['tags'].map(function (item) {
-          return { tag: item };
-        });
+        var tags = (response && response['tags']) || [];
+        tags = tags.map(function (item) { return { tag: item }; });
 
         $chips.material_chip({ data: tags });
       });
